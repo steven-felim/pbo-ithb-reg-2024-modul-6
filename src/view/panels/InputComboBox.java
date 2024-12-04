@@ -22,6 +22,18 @@ public class InputComboBox {
         return panel;
     }
 
+    public JPanel createInputComboBoxAgama(String labelText, Agama selected) {
+        JPanel panel = createPanel(labelText);
+
+        Object[] arrAgama = Agama.values();
+
+        cAgama = new JComboBox(arrAgama);
+        panel.add(cAgama);
+
+        cAgama.setSelectedItem(selected);
+        return panel;
+    }
+
     public JPanel createInputComboBoxStatusKawin(String labelText) {
         JPanel panel = createPanel(labelText);
         StatusPerkawinan[] status = StatusPerkawinan.values();
@@ -31,6 +43,18 @@ public class InputComboBox {
 
         cStatusKawin = new JComboBox(arrStatusPerkawinan);
         panel.add(cStatusKawin);
+        return panel;
+    }
+
+    public JPanel createInputComboBoxStatusKawin(String labelText, StatusPerkawinan selected) {
+        JPanel panel = createPanel(labelText);
+
+        Object[] arrStatusPerkawinan = StatusPerkawinan.values();
+
+        cStatusKawin = new JComboBox(arrStatusPerkawinan);
+        panel.add(cStatusKawin);
+
+        cStatusKawin.setSelectedItem(selected);
         return panel;
     }
 }

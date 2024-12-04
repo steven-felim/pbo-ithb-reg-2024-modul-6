@@ -93,7 +93,7 @@ public class Validator {
         }
         for (JCheckBox checkPekerjaan : listPekerjaan) {
             if (checkPekerjaan.isSelected()) {
-                pekerjaan += checkPekerjaan.getText() + " ";
+                pekerjaan += checkPekerjaan.getText() + ", ";
             }
         }
 

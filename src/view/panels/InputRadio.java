@@ -28,6 +28,31 @@ public class InputRadio {
         return panel;
     }
 
+    public JPanel createRadGender(String labelText, String selected) {
+        JPanel panel = createPanel(labelText);
+
+        JRadioButton radioButtonM = new JRadioButton(String.valueOf(JenisKelamin.PRIA));
+        JRadioButton radioButtonF = new JRadioButton(String.valueOf(JenisKelamin.WANITA));
+
+        radioButtonM.setActionCommand(radioButtonM.getText());
+        radioButtonF.setActionCommand(radioButtonF.getText());
+
+        bGender = new ButtonGroup();
+        bGender.add(radioButtonM);
+        bGender.add(radioButtonF);
+
+        panel.add(radioButtonM);
+        panel.add(radioButtonF);
+
+        if (selected.equals("PRIA")) {
+            radioButtonM.setSelected(true);
+        } else {
+            radioButtonF.setSelected(true);
+        }
+
+        return panel;
+    }
+
     public JPanel createRadGolDarah(String labelText) {
         JPanel panel = createPanel(labelText);
         JRadioButton a = new JRadioButton(String.valueOf(GolonganDarah.A));
@@ -50,6 +75,48 @@ public class InputRadio {
         panel.add(b);
         panel.add(o);
         panel.add(ab);
+        return panel;
+    }
+
+    public JPanel createRadGolDarah(String labelText, String selected) {
+        JPanel panel = createPanel(labelText);
+
+        JRadioButton a = new JRadioButton(String.valueOf(GolonganDarah.A));
+        JRadioButton b = new JRadioButton(String.valueOf(GolonganDarah.B));
+        JRadioButton o = new JRadioButton(String.valueOf(GolonganDarah.O));
+        JRadioButton ab = new JRadioButton(String.valueOf(GolonganDarah.AB));
+
+        a.setActionCommand(a.getText());
+        b.setActionCommand(b.getText());
+        o.setActionCommand(o.getText());
+        ab.setActionCommand(ab.getText());
+
+        bGolDarah = new ButtonGroup();
+        bGolDarah.add(a);
+        bGolDarah.add(b);
+        bGolDarah.add(o);
+        bGolDarah.add(ab);
+
+        panel.add(a);
+        panel.add(b);
+        panel.add(o);
+        panel.add(ab);
+
+        switch (selected) {
+            case "A":
+                a.setSelected(true);
+                break;
+            case "B":
+                b.setSelected(true);
+                break;
+            case "AB":
+                ab.setSelected(true);
+                break;
+            default:
+                o.setSelected(true);
+                break;
+        }
+
         return panel;
     }
 
@@ -87,6 +154,53 @@ public class InputRadio {
 
         wni.setActionCommand(wni.getText());
         wna.setActionCommand(wna.getText());
+
+        return panel;
+    }
+
+    public JPanel createRadWN(String labelText, String selected) {
+        JPanel panel = createPanel(labelText);
+
+        JRadioButton wni = new JRadioButton("WNI");
+        JRadioButton wna = new JRadioButton("WNA");
+
+        wni.setActionCommand("WNI");
+        wna.setActionCommand("WNA");
+
+        bKewarganegaraan = new ButtonGroup();
+        bKewarganegaraan.add(wni);
+        bKewarganegaraan.add(wna);
+
+        fWNA = new JTextField(20);
+        fWNA.setVisible(false);
+
+        if(selected.equalsIgnoreCase("WNI ")){
+            wni.setSelected(true);
+        }else{
+            String[] split = selected.split(" ");
+            wna.setSelected(true);
+            fWNA = new JTextField(split[1],20);
+        }
+
+        panel.add(wni);
+        panel.add(wna);
+        panel.add(fWNA);
+
+        wna.addActionListener(e -> {
+            if (wna.isSelected()) {
+                fWNA.setVisible(true);
+                panel.revalidate();
+                panel.repaint();
+            }
+        });
+
+        wni.addActionListener(e -> {
+            if (wni.isSelected()) {
+                fWNA.setVisible(false);
+                panel.revalidate();
+                panel.repaint();
+            }
+        });
 
         return panel;
     }

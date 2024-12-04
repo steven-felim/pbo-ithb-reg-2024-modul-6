@@ -6,9 +6,11 @@ import view.panels.ShowImage;
 import view.panels.ShowText;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 
-public class Hasil extends JFrame {
+public class Hasil extends JFrame implements ActionListener {
     private DataKTP data;
     private ShowText show = new ShowText();
     private ShowImage img = new ShowImage();
@@ -51,6 +53,17 @@ public class Hasil extends JFrame {
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.CENTER;
         c.add(createRightLayout(data), gbc);
+
+        JButton submit = new JButton("Main Menu");
+        submit.setBounds(10, 100, 200, 40);
+        submit.addActionListener(this);
+        submit.setEnabled(true);
+        submit.setVisible(true);
+
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        c.add(submit, gbc);
 
         this.add(c);
         this.setVisible(true);
@@ -123,7 +136,7 @@ public class Hasil extends JFrame {
 
         gbr.gridx = 0;
         gbr.gridy = 0;
-        rc.add(img.createShowImage("D:\\#ITHB Semester 3\\Ganjil 2024 - Praktikum Pemrograman Berorientasi Objek\\20241129\\pbo-ithb-reg-2024-modul-6\\src\\img" + d.getFoto(), "pasFoto"), gbr);
+        rc.add(img.createShowImage("D:\\#ITHB Semester 3\\Ganjil 2024 - Praktikum Pemrograman Berorientasi Objek\\20241129\\pbo-ithb-reg-2024-modul-6\\src\\img\\" + d.getFoto(), "pasFoto"), gbr);
 
         gbr.gridy++;
         rc.add(show.createTextPanel(d.getKotaPembuatanKTP(), " "), gbr);
@@ -132,8 +145,18 @@ public class Hasil extends JFrame {
         rc.add(show.createTextPanel(sdf.format(d.getTanggalPembuatanKTP()), " "), gbr);
 
         gbr.gridy++;
-        rc.add(img.createShowImage("D:\\#ITHB Semester 3\\Ganjil 2024 - Praktikum Pemrograman Berorientasi Objek\\20241129\\pbo-ithb-reg-2024-modul-6\\src\\img" + d.getTandaTangan(), "ttd"), gbr);
+        rc.add(img.createShowImage("D:\\#ITHB Semester 3\\Ganjil 2024 - Praktikum Pemrograman Berorientasi Objek\\20241129\\pbo-ithb-reg-2024-modul-6\\src\\img\\" + d.getTandaTangan(), "ttd"), gbr);
 
         return rc;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        onSubmit();
+    }
+
+    private void onSubmit() {
+        new Menu();
+        this.dispose();
     }
 }
