@@ -1,30 +1,39 @@
 package view;
 
+import controller.GetData;
 import model.classes.DataKTP;
 import view.panels.ShowImage;
 import view.panels.ShowText;
-import org.jdatepicker.impl.UtilDateModel;
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
 
 public class Hasil extends JFrame {
+    private DataKTP data;
     private ShowText show = new ShowText();
     private ShowImage img = new ShowImage();
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-    public void HasilKTP(DataKTP data) {
-        initComponents(data);
+    public Hasil(boolean isSuccess, String NIK) {
+        if (!isSuccess) {
+            JOptionPane.showMessageDialog(null, "Task Failed !", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            GetData dataFromDB = new GetData();
+            data = dataFromDB.fetchDataFromDB(NIK);
+
+            initComponents();
+        }
     }
 
-    private void initComponents(DataKTP data) {
+    private void initComponents() {
         this.setTitle("Input Data");
         this.setBounds(400, 200, 1024, 768);
         this.setLocationRelativeTo(null);
 
-        JPanel c = new JPanel(new GridBagLayout()); // Gunakan GridBagLayout di panel utama
+        JPanel c = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 20, 20, 0);
 
-        // Header label
         JLabel header = new JLabel("Republik Harapan Bangsa");
         header.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
         gbc.gridx = 0;
@@ -45,6 +54,7 @@ public class Hasil extends JFrame {
 
         this.add(c);
         this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
 
@@ -59,11 +69,11 @@ public class Hasil extends JFrame {
         gbl.gridy = 0;
         lc.add(show.createTextPanel(d.getNik(), "NIK : "), gbl);
 
-        gbl.gridy++;  // Naikkan baris untuk elemen berikutnya
+        gbl.gridy++;
         lc.add(show.createTextPanel(d.getNama(), "Nama : "), gbl);
 
         gbl.gridy++;
-        lc.add(show.createTextPanel(d.getTempatLahir() + ", " + d.getTanggalLahir(), "Tempat/Tgl Lahir : "), gbl);
+        lc.add(show.createTextPanel(d.getTempatLahir() + ", " + sdf.format(d.getTanggalLahir()), "Tempat/Tgl Lahir : "), gbl);
 
         gbl.gridy++;
         lc.add(show.createTextPanel(d.getJenisKelamin().toString(), "Jenis Kelamin : "), gbl);
@@ -76,7 +86,7 @@ public class Hasil extends JFrame {
         lc.add(show.createTextPanel(d.getAlamat(), "Alamat : "), gbl);
 
         gbl.gridy++;
-        gbl.insets = new Insets(0, 40, 15, 0);  // Ubah sedikit padding
+        gbl.insets = new Insets(0, 40, 15, 0);
         lc.add(show.createTextPanel(d.getRtRw(), "RT/RW : "), gbl);
 
         gbl.gridy++;
@@ -113,16 +123,16 @@ public class Hasil extends JFrame {
 
         gbr.gridx = 0;
         gbr.gridy = 0;
-        rc.add(img.createShowImage(d.getFoto(), "pasFoto"), gbr);
+        rc.add(img.createShowImage("D:\\#ITHB Semester 3\\Ganjil 2024 - Praktikum Pemrograman Berorientasi Objek\\20241129\\pbo-ithb-reg-2024-modul-6\\src\\img" + d.getFoto(), "pasFoto"), gbr);
 
         gbr.gridy++;
-        rc.add(show.createTextPanel(d.getKotaPembuatanKTP(), ""), gbr);
+        rc.add(show.createTextPanel(d.getKotaPembuatanKTP(), " "), gbr);
 
         gbr.gridy++;
-        rc.add(show.createTextPanel(d.getTanggalPembuatanKTP().toString(), ""), gbr);
+        rc.add(show.createTextPanel(sdf.format(d.getTanggalPembuatanKTP()), " "), gbr);
 
         gbr.gridy++;
-        rc.add(img.createShowImage(d.getTandaTangan(), "ttd"), gbr);
+        rc.add(img.createShowImage("D:\\#ITHB Semester 3\\Ganjil 2024 - Praktikum Pemrograman Berorientasi Objek\\20241129\\pbo-ithb-reg-2024-modul-6\\src\\img" + d.getTandaTangan(), "ttd"), gbr);
 
         return rc;
     }

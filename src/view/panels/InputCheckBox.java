@@ -7,7 +7,7 @@ import java.util.List;
 import static view.panels.Panel.createPanel;
 
 public class InputCheckBox {
-    private List<JCheckBox> pekerjaan;
+    public List<JCheckBox> pekerjaan;
 
     public JPanel createCheckBoxPekerjaan(String labelText) {
         JPanel panel = createPanel(labelText);

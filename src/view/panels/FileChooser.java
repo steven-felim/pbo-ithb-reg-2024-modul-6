@@ -14,6 +14,7 @@ public class FileChooser {
             int returnValue = fileChooser.showOpenDialog(panel);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 data.setFoto(fileChooser.getSelectedFile().getAbsolutePath());
+                browseButton.setText(data.getFoto());
             }
         });
         panel.add(browseButton);
@@ -27,6 +28,7 @@ public class FileChooser {
             int returnValue = fileChooser.showOpenDialog(panel);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 data.setTandaTangan(fileChooser.getSelectedFile().getAbsolutePath());
+                browseButton.setText(data.getTandaTangan());
             }
         });
         panel.add(browseButton);

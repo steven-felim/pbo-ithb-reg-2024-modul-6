@@ -8,7 +8,7 @@ import javax.swing.*;
 import static view.panels.Panel.createPanel;
 
 public class InputComboBox {
-    private JComboBox<String> cAgama, cStatusKawin;
+    public JComboBox<String> cAgama, cStatusKawin;
 
     public JPanel createInputComboBoxAgama(String labelText) {
         JPanel panel = createPanel(labelText);
@@ -22,10 +22,6 @@ public class InputComboBox {
         return panel;
     }
 
-    public Agama getSelectedAgama() {
-        return (Agama) cAgama.getSelectedItem();
-    }
-
     public JPanel createInputComboBoxStatusKawin(String labelText) {
         JPanel panel = createPanel(labelText);
         StatusPerkawinan[] status = StatusPerkawinan.values();
@@ -36,9 +32,5 @@ public class InputComboBox {
         cStatusKawin = new JComboBox(arrStatusPerkawinan);
         panel.add(cStatusKawin);
         return panel;
-    }
-
-    public StatusPerkawinan getSelectedStatusPerkawinan() {
-        return (StatusPerkawinan) cStatusKawin.getSelectedItem();
     }
 }

@@ -8,8 +8,8 @@ import javax.swing.*;
 import static view.panels.Panel.createPanel;
 
 public class InputRadio {
-    private ButtonGroup bGender, bGolDarah, bKewarganegaraan;
-    private JTextField fWNA;
+    public ButtonGroup bGender, bGolDarah, bKewarganegaraan;
+    public JTextField fWNA;
 
     public JPanel createRadGender(String labelText) {
         JPanel panel = createPanel(labelText);
@@ -26,17 +26,6 @@ public class InputRadio {
         panel.add(pria);
         panel.add(wanita);
         return panel;
-    }
-
-    public JenisKelamin getSelectedGender() {
-        String selected = bGender.getSelection().getActionCommand();
-
-        if (selected.equals(String.valueOf(JenisKelamin.PRIA))) {
-            return JenisKelamin.PRIA;
-        } else if (selected.equals(String.valueOf(JenisKelamin.WANITA))) {
-            return JenisKelamin.WANITA;
-        }
-        return null;
     }
 
     public JPanel createRadGolDarah(String labelText) {
@@ -62,21 +51,6 @@ public class InputRadio {
         panel.add(o);
         panel.add(ab);
         return panel;
-    }
-
-    public GolonganDarah getSelectedGolonganDarah() {
-        String selected = bGolDarah.getSelection().getActionCommand();
-
-        if (selected.equals(String.valueOf(GolonganDarah.A))) {
-            return GolonganDarah.A;
-        } else if (selected.equals(String.valueOf(GolonganDarah.B))) {
-            return GolonganDarah.B;
-        } else if (selected.equals(String.valueOf(GolonganDarah.O))) {
-            return GolonganDarah.O;
-        } else if (selected.equals(String.valueOf(GolonganDarah.AB))) {
-            return GolonganDarah.AB;
-        }
-        return null;
     }
 
     public JPanel createRadWN(String labelText) {
@@ -115,18 +89,5 @@ public class InputRadio {
         wna.setActionCommand(wna.getText());
 
         return panel;
-    }
-
-    public String getSelectedKewarganegaraan() {
-        String selected = bKewarganegaraan.getSelection().getActionCommand();
-
-        if (selected.equals("WNI")) {
-            return "WNI";
-        } else if (selected.equals("WNA")) {
-            if (!fWNA.getText().isEmpty()) {
-                return "WNA " + fWNA.getText();
-            }
-        }
-        return null;
     }
 }

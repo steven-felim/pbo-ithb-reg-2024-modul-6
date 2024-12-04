@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 
+import controller.SaveData;
 import controller.Validator;
 import model.classes.DataKTP;
 import model.classes.DateLabelFormatter;
@@ -11,26 +12,36 @@ import view.panels.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.File;
 import java.util.*;
 
 public class InputForm extends JFrame implements ActionListener {
-    private JButton submit;
-    private DataKTP data = new DataKTP();
-    private Validator validator = new Validator();
+    private final DataKTP data = new DataKTP();
+    private final Validator validator = new Validator();
 
-    private InputPanel input = new InputPanel();
-    private InputDate date = new InputDate();
-    private InputRadio radio = new InputRadio();
-    private InputComboBox comboBox = new InputComboBox();
-    private InputCheckBox checkBox = new InputCheckBox();
-    private FileChooser fileChooser = new FileChooser();
+    private final InputPanel input = new InputPanel();
+    private final InputDate date = new InputDate();
+    private final InputRadio radio = new InputRadio();
+    private final InputComboBox comboBox = new InputComboBox();
+    private final InputCheckBox checkBox = new InputCheckBox();
+    private final FileChooser fileChooser = new FileChooser();
 
-    private JTextField fNik, fNama, fTempatLahir, fAlamat, fRtRw, fKelDesa, fKecamatan, fBerlakuHingga, fKotaPembuatanKtp, fWNA;
+    private JTextField fNik, fNama, fTempatLahir, fAlamat, fRtRw, fKelDesa, fKecamatan, fBerlakuHingga, fKotaPembuatanKtp;
     private JDatePickerImpl fTanggalLahir, fTanggalPembuatanKTP;
     private JFileChooser fcFoto, fcTtd;
 
+    Map<String, String> userInputText, userInputRadio, userInputComboBox;
+    Map<String, Date> userInputDate;
+    Map<String, File> userInputFileChooser;
+
+    Map<String,Object> allInput = new HashMap<>();
+
     public InputForm() {
+        userInputText = new HashMap<>();
+        userInputDate = new HashMap<>();
+        userInputRadio = new HashMap<>();
+        userInputComboBox = new HashMap<>();
+        userInputFileChooser = new HashMap<>();
         initComponents();
     }
 
@@ -131,7 +142,7 @@ public class InputForm extends JFrame implements ActionListener {
         JScrollPane scrollPane = new JScrollPane(c);
         this.add(scrollPane);
 
-        submit = new JButton("Submit!");
+        JButton submit = new JButton("Submit!");
         submit.setBounds(10, 100, 200, 40);
         submit.addActionListener(this);
         submit.setEnabled(true);
@@ -152,33 +163,60 @@ public class InputForm extends JFrame implements ActionListener {
     }
 
     private void onSubmit() {
-        data.setNik(fNik.getText());
-        data.setNama(fNama.getText());
-        data.setTempatLahir(fTempatLahir.getText());
-        data.setTanggalLahir((Date) fTanggalLahir.getModel().getValue());
-        data.setJenisKelamin(radio.getSelectedGender());
-        data.setGolonganDarah(radio.getSelectedGolonganDarah());
-        data.setAlamat(fAlamat.getText());
-        data.setRtRw(fRtRw.getText());
-        data.setKelDesa(fKelDesa.getText());
-        data.setKecamatan(fKecamatan.getText());
-        data.setAgama(comboBox.getSelectedAgama());
-        data.setStatus(comboBox.getSelectedStatusPerkawinan());
-        data.setPekerjaan(checkBox.getSelectedPekerjaan());
-        data.setKewarganegaraan(radio.getSelectedKewarganegaraan());
-        data.setTandaTangan(fcTtd.getSelectedFile().getAbsolutePath());
-        data.setBerlakuHingga(fBerlakuHingga.getText());
-        data.setKotaPembuatanKTP(fKotaPembuatanKtp.getText());
-        data.setTanggalPembuatanKTP((Date) fTanggalPembuatanKTP.getModel().getValue());
+        inputMap();
+        LinkedList<Boolean> isValid = new LinkedList<>();
 
-        boolean validSemua = validator.validateForm(data);
-        if (validSemua) {
-            new Hasil().HasilKTP(data);
+        isValid.add(validator.validateText(userInputText));
+        isValid.add(validator.validateDate(userInputDate));
+        isValid.add(validator.validateRadio(userInputRadio, userInputText));
+        isValid.add(validator.validateComboBox(userInputComboBox));
+        isValid.add(validator.validateFileChooser(userInputFileChooser));
+        isValid.add(validator.validateCheckBox(checkBox.pekerjaan, userInputText));
+
+        boolean isReallyValid = true;
+
+        Iterator<Boolean> iterator = isValid.iterator();
+        while (iterator.hasNext() && isReallyValid) {
+            isReallyValid = iterator.next();
+        }
+
+        allInput.putAll(userInputText);
+        allInput.putAll(userInputDate);
+        allInput.putAll(userInputRadio);
+        allInput.putAll(userInputComboBox);
+        allInput.putAll(userInputFileChooser);
+
+        if (isReallyValid) {
+            SaveData save = new SaveData();
+            new Hasil(save.insertToDatabase(allInput), fNik.getText());
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Input Tidak Valid", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    private void inputMap() {
+        userInputText.put("nik", fNik.getText());
+        userInputText.put("nama", fNama.getText());
+        userInputText.put("tempatLahir", fTempatLahir.getText());
+        userInputText.put("alamat", fAlamat.getText());
+        userInputText.put("rtRw", fRtRw.getText());
+        userInputText.put("kelDesa", fKelDesa.getText());
+        userInputText.put("kecamatan", fKecamatan.getText());
+        userInputText.put("kotaPembuatanKtp", fKotaPembuatanKtp.getText());
+        userInputText.put("additionalWNA", radio.fWNA.getText());
 
+        userInputDate.put("tanggalLahir", (Date) fTanggalLahir.getModel().getValue());
+        userInputDate.put("tanggalPembuatanKTP", (Date) fTanggalPembuatanKTP.getModel().getValue());
+
+        userInputRadio.put("gender", radio.bGender.getSelection().getActionCommand());
+        userInputRadio.put("golDar", radio.bGolDarah.getSelection().getActionCommand());
+        userInputRadio.put("kewarganegaraan", radio.bKewarganegaraan.getSelection().getActionCommand());
+
+        userInputComboBox.put("agama", comboBox.cAgama.getSelectedItem().toString());
+        userInputComboBox.put("statusKawin", comboBox.cStatusKawin.getSelectedItem().toString());
+
+        userInputFileChooser.put("fileFoto", fcFoto.getSelectedFile());
+        userInputFileChooser.put("fileTandaTangan", fcTtd.getSelectedFile());
+    }
 }
